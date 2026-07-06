@@ -1,189 +1,829 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="scroll-smooth">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Yoga Consultings — Find your balance, one breath at a time</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,340;0,9..144,480;1,9..144,420&family=Manrope:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YogaConsult — Find Your Balance</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        sage: {
+                            50:'#f4f7f5',100:'#e6ece8',200:'#cdd9d1',
+                            300:'#a8bfb0',400:'#7da088',500:'#5c846a',
+                            600:'#476a55',700:'#3a5545',800:'#314539',
+                            900:'#293a30',950:'#0f1f16',
+                        },
+                        gold: { 300:'#e6c76a',400:'#d4a843',500:'#c9982a',600:'#b8862a' },
+                        cream: '#f0ebe4',
+                        warm: '#faf8f5',
+                    },
+                    fontFamily: {
+                        display: ['"Playfair Display"','serif'],
+                        body: ['"Poppins"','sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,800;1,400;1,600&family=Poppins:wght@200;300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+    <style>
+        *{margin:0;padding:0;box-sizing:border-box}
+        body{font-family:'Poppins',sans-serif;background:#faf8f5;color:#1a1a1a;overflow-x:hidden}
+
+        #navbar.scrolled{background:rgba(255,255,255,0.92);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);box-shadow:0 1px 30px rgba(0,0,0,0.06)}
+        #navbar.scrolled .nav-logo{color:#293a30}
+        #navbar.scrolled .nav-link{color:#555}
+        #navbar.scrolled .nav-link:hover{color:#476a55}
+        #navbar.scrolled .menu-icon{color:#293a30}
+        #navbar.scrolled .bookings-btn{color:#293a30;border-color:#293a30}
+        #navbar.scrolled .bookings-btn:hover{background:#293a30;color:#fff}
+
+        .orb{position:absolute;border-radius:50%;filter:blur(100px);opacity:0.4;will-change:transform}
+        .orb-1{width:500px;height:500px;background:radial-gradient(circle,#476a55,transparent 70%);top:-10%;left:-5%;animation:float1 18s ease-in-out infinite}
+        .orb-2{width:400px;height:400px;background:radial-gradient(circle,#2d5a43,transparent 70%);bottom:-10%;right:-5%;animation:float2 22s ease-in-out infinite}
+        .orb-3{width:300px;height:300px;background:radial-gradient(circle,#c9982a,transparent 70%);top:40%;right:20%;opacity:0.15;animation:float3 15s ease-in-out infinite}
+        @keyframes float1{0%,100%{transform:translate(0,0) scale(1)}33%{transform:translate(60px,40px) scale(1.1)}66%{transform:translate(-30px,60px) scale(0.95)}}
+        @keyframes float2{0%,100%{transform:translate(0,0) scale(1)}33%{transform:translate(-50px,-30px) scale(1.05)}66%{transform:translate(40px,-50px) scale(0.9)}}
+        @keyframes float3{0%,100%{transform:translate(0,0)}50%{transform:translate(-40px,30px)}}
+
+        .breath-circle{position:absolute;inset:0;margin:auto;width:450px;height:450px;border-radius:50%;border:1px solid rgba(71,106,85,0.25);box-shadow:0 0 100px rgba(71,106,85,0.08),inset 0 0 100px rgba(71,106,85,0.03);animation:breathe 6s ease-in-out infinite;will-change:transform}
+        .breath-circle::after{content:'';position:absolute;inset:40px;border-radius:50%;border:1px solid rgba(71,106,85,0.15);animation:breathe 6s ease-in-out infinite .3s}
+        @keyframes breathe{0%,100%{transform:scale(0.92);opacity:0.5}50%{transform:scale(1.08);opacity:1}}
+
+        .scroll-line{animation:scrollLine 2s ease-in-out infinite}
+        @keyframes scrollLine{0%{transform:translateY(-100%);opacity:0}30%{opacity:1}70%{opacity:1}100%{transform:translateY(200%);opacity:0}}
+
+        .reveal{opacity:0;transform:translateY(40px);transition:opacity .8s cubic-bezier(.16,1,.3,1),transform .8s cubic-bezier(.16,1,.3,1)}
+        .reveal.visible{opacity:1;transform:translateY(0)}
+        .reveal-delay-1{transition-delay:.1s}.reveal-delay-2{transition-delay:.2s}.reveal-delay-3{transition-delay:.3s}
+
+        .service-card{transition:transform .4s cubic-bezier(.16,1,.3,1),box-shadow .4s cubic-bezier(.16,1,.3,1)}
+        .service-card:hover{transform:translateY(-10px);box-shadow:0 25px 60px rgba(15,31,22,0.1)}
+        .service-card .accent-line{transition:width .4s cubic-bezier(.16,1,.3,1);width:40px}
+        .service-card:hover .accent-line{width:80px}
+        .service-card .icon-wrap{transition:background .4s,color .4s}
+        .service-card:hover .icon-wrap{background:#476a55;color:white}
+
+        .testimonial-card{transition:transform .4s cubic-bezier(.16,1,.3,1),box-shadow .4s cubic-bezier(.16,1,.3,1)}
+        .testimonial-card:hover{transform:translateY(-6px);box-shadow:0 20px 50px rgba(15,31,22,0.08)}
+
+        .btn-gold{transition:background .3s,transform .3s,box-shadow .3s}
+        .btn-gold:hover{background:#d4a843;transform:translateY(-2px);box-shadow:0 10px 30px rgba(201,152,42,0.3)}
+        .btn-outline{transition:background .3s,color .3s,transform .3s}
+        .btn-outline:hover{background:white;color:#293a30;transform:translateY(-2px)}
+
+        #mobileMenu{transition:transform .5s cubic-bezier(.16,1,.3,1)}
+        #mobileMenu.open{transform:translateX(0)}
+
+        .section-label{letter-spacing:.2em}
+
+        a:focus-visible,button:focus-visible{outline:2px solid #c9982a;outline-offset:2px;border-radius:4px}
+
+        /* Booking Modal */
+        #bookingModal{transition:opacity .35s,visibility .35s}
+        #bookingModal.active{opacity:1;visibility:visible}
+        #bookingModal .modal-panel{transition:transform .45s cubic-bezier(.16,1,.3,1),opacity .35s;transform:translateY(40px) scale(0.97);opacity:0}
+        #bookingModal.active .modal-panel{transform:translateY(0) scale(1);opacity:1}
+
+        /* Bookings Panel */
+        #bookingsPanel{transition:transform .5s cubic-bezier(.16,1,.3,1),opacity .4s;transform:translateX(100%);opacity:0;visibility:hidden}
+        #bookingsPanel.open{transform:translateX(0);opacity:1;visibility:visible}
+
+        /* Toast */
+        .toast{animation:toastIn .45s cubic-bezier(.16,1,.3,1) forwards}
+        .toast.removing{animation:toastOut .35s cubic-bezier(.7,0,.84,0) forwards}
+        @keyframes toastIn{from{transform:translateX(100%);opacity:0}to{transform:translateX(0);opacity:1}}
+        @keyframes toastOut{from{transform:translateX(0);opacity:1}to{transform:translateX(100%);opacity:0}}
+
+        /* Form inputs */
+        .form-input{transition:border-color .3s,box-shadow .3s}
+        .form-input:focus{border-color:#476a55;box-shadow:0 0 0 3px rgba(71,106,85,0.12)}
+        .form-input.error{border-color:#dc2626;box-shadow:0 0 0 3px rgba(220,38,38,0.08)}
+        .error-msg{animation:errorIn .3s ease}
+        @keyframes errorIn{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:translateY(0)}}
+
+        /* Booking card delete animation */
+        .booking-card{transition:transform .3s,opacity .3s,box-shadow .3s}
+        .booking-card:hover{transform:translateX(-4px);box-shadow:0 8px 30px rgba(15,31,22,0.08)}
+        .booking-card.removing{transform:translateX(60px);opacity:0}
+
+        /* Badge pulse */
+        .badge-pulse{animation:badgePulse 2s ease-in-out infinite}
+        @keyframes badgePulse{0%,100%{transform:scale(1)}50%{transform:scale(1.15)}}
+
+        @media(prefers-reduced-motion:reduce){
+            *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
+            .reveal{opacity:1;transform:none}
+        }
+        @media(max-width:768px){
+            .breath-circle{width:280px;height:280px}
+            .breath-circle::after{inset:25px}
+            .orb-1{width:300px;height:300px}
+            .orb-2{width:250px;height:250px}
+            .orb-3{width:180px;height:180px}
+        }
+    </style>
 </head>
-<body>
 
-<header class="site-header" id="siteHeader">
-  <nav class="navbar">
-    <a href="#" class="logo">Yoga Consultings</a>
-    <button class="nav-toggle" id="navToggle" aria-label="Open menu" aria-expanded="false">
-      <span></span><span></span><span></span>
-    </button>
-    <ul class="nav-links" id="navLinks">
-      <li><a href="#services">Services</a></li>
-      <li><a href="#about">About</a></li>
-      <li><a href="#contact">Contact</a></li>
-      <li><a href="#contact" class="btn btn-small">Book now</a></li>
-    </ul>
-  </nav>
-</header>
+<body class="font-body">
 
-<main>
-
-  <section class="hero">
-    <div class="hero-inner">
-      <div class="hero-copy reveal">
-        <p class="eyebrow">Consultations rooted in breath</p>
-        <h1>Find your balance,<br>one breath at a time.</h1>
-        <p class="hero-sub">Personalised yoga consultations that help you move easier, think clearer, and feel more at home in your own body — starting with a conversation, not a class schedule.</p>
-        <div class="hero-actions">
-          <a href="#contact" class="btn">Book a consultation</a>
-          <a href="#services" class="link-arrow">See how it works ↓</a>
+    <!-- ====== NAVBAR ====== -->
+    <nav id="navbar" class="fixed top-0 left-0 right-0 z-50 transition-all duration-500">
+        <div class="max-w-7xl mx-auto px-6 lg:px-12 flex items-center justify-between h-20">
+            <a href="#" class="nav-logo font-display text-2xl font-bold text-white transition-colors duration-500">YogaConsult</a>
+            <ul class="hidden md:flex items-center gap-8">
+                <li><a href="#" class="nav-link text-white/80 hover:text-white text-sm font-medium tracking-wide transition-colors duration-300">Home</a></li>
+                <li><a href="#services" class="nav-link text-white/80 hover:text-white text-sm font-medium tracking-wide transition-colors duration-300">Services</a></li>
+                <li><a href="#about" class="nav-link text-white/80 hover:text-white text-sm font-medium tracking-wide transition-colors duration-300">About</a></li>
+                <li><a href="#testimonials" class="nav-link text-white/80 hover:text-white text-sm font-medium tracking-wide transition-colors duration-300">Testimonials</a></li>
+                <li><a href="#contact" class="nav-link text-white/80 hover:text-white text-sm font-medium tracking-wide transition-colors duration-300">Contact</a></li>
+            </ul>
+            <div class="flex items-center gap-3">
+                <button id="openBookings" class="bookings-btn relative w-10 h-10 rounded-full border border-white/30 flex items-center justify-center text-white text-sm transition-all duration-300 hover:bg-white hover:text-sage-950" aria-label="View my bookings">
+                    <i class="fas fa-calendar-check"></i>
+                    <span id="bookingBadge" class="hidden absolute -top-1 -right-1 w-5 h-5 bg-gold-500 text-sage-950 text-[10px] font-bold rounded-full flex items-center justify-center badge-pulse">0</span>
+                </button>
+                <a href="#" id="navBookBtn" class="hidden md:inline-block px-6 py-2.5 bg-gold-500 text-sage-950 font-semibold rounded-full text-sm btn-gold">Book Now</a>
+                <button id="menuBtn" class="md:hidden menu-icon text-white text-2xl transition-colors duration-500" aria-label="Open menu">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
         </div>
-      </div>
+    </nav>
 
-      <div class="hero-breath reveal" aria-hidden="false">
-        <div class="breath-widget" id="breathWidget">
-          <svg class="breath-rings" viewBox="0 0 320 320" role="img" aria-label="Breathing pace guide">
-            <circle class="ring ring-outer" cx="160" cy="160" r="140"></circle>
-            <circle class="ring ring-mid" cx="160" cy="160" r="105"></circle>
-            <circle class="ring ring-core" cx="160" cy="160" r="70"></circle>
-          </svg>
-          <div class="breath-label">
-            <span class="breath-word" id="breathWord">Inhale</span>
-            <span class="breath-count" id="breathCount">4</span>
-          </div>
+    <!-- ====== MOBILE MENU ====== -->
+    <div id="mobileMenu" class="fixed inset-0 z-40 bg-sage-950/98 backdrop-blur-xl flex flex-col items-center justify-center gap-8 transform translate-x-full md:hidden">
+        <button id="closeMenu" class="absolute top-6 right-6 text-white text-2xl" aria-label="Close menu"><i class="fas fa-times"></i></button>
+        <a href="#" class="mobile-link text-white text-2xl font-light tracking-wide hover:text-gold-400 transition">Home</a>
+        <a href="#services" class="mobile-link text-white text-2xl font-light tracking-wide hover:text-gold-400 transition">Services</a>
+        <a href="#about" class="mobile-link text-white text-2xl font-light tracking-wide hover:text-gold-400 transition">About</a>
+        <a href="#testimonials" class="mobile-link text-white text-2xl font-light tracking-wide hover:text-gold-400 transition">Testimonials</a>
+        <a href="#contact" class="mobile-link text-white text-2xl font-light tracking-wide hover:text-gold-400 transition">Contact</a>
+        <a href="#" id="mobileBookBtn" class="mt-4 px-8 py-3 bg-gold-500 text-sage-950 font-semibold rounded-full btn-gold">Book Now</a>
+    </div>
+
+    <!-- ====== BOOKING MODAL ====== -->
+    <div id="bookingModal" class="fixed inset-0 z-[60] flex items-center justify-center p-4 opacity-0 invisible">
+        <div id="modalOverlay" class="absolute inset-0 bg-sage-950/70 backdrop-blur-sm"></div>
+        <div class="modal-panel relative bg-white rounded-3xl w-full max-w-lg max-h-[90vh] overflow-y-auto shadow-2xl">
+            <!-- Modal header -->
+            <div class="sticky top-0 bg-white/90 backdrop-blur-md rounded-t-3xl px-8 pt-8 pb-4 border-b border-sage-100 z-10">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <h3 class="font-display text-2xl font-bold text-sage-900">Book a Session</h3>
+                        <p class="text-sage-500 text-xs font-light mt-1">Fill in your details to schedule a consultation</p>
+                    </div>
+                    <button id="closeModal" class="w-10 h-10 rounded-full bg-sage-50 hover:bg-sage-100 flex items-center justify-center text-sage-500 transition" aria-label="Close booking form">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            </div>
+            <!-- Modal body -->
+            <form id="bookingForm" class="px-8 py-6 space-y-5" novalidate>
+                <!-- Name -->
+                <div>
+                    <label class="block text-sage-800 text-sm font-medium mb-1.5">Full Name</label>
+                    <input type="text" id="bName" class="form-input w-full px-4 py-3 rounded-xl border border-sage-200 text-sage-900 text-sm placeholder:text-sage-400 outline-none" placeholder="Your full name" autocomplete="name">
+                    <p class="error-msg hidden text-red-500 text-xs mt-1.5"></p>
+                </div>
+                <!-- Email -->
+                <div>
+                    <label class="block text-sage-800 text-sm font-medium mb-1.5">Email Address</label>
+                    <input type="email" id="bEmail" class="form-input w-full px-4 py-3 rounded-xl border border-sage-200 text-sage-900 text-sm placeholder:text-sage-400 outline-none" placeholder="you@example.com" autocomplete="email">
+                    <p class="error-msg hidden text-red-500 text-xs mt-1.5"></p>
+                </div>
+                <!-- Phone -->
+                <div>
+                    <label class="block text-sage-800 text-sm font-medium mb-1.5">Phone Number</label>
+                    <input type="tel" id="bPhone" class="form-input w-full px-4 py-3 rounded-xl border border-sage-200 text-sage-900 text-sm placeholder:text-sage-400 outline-none" placeholder="+1 (555) 000-0000" autocomplete="tel">
+                    <p class="error-msg hidden text-red-500 text-xs mt-1.5"></p>
+                </div>
+                <!-- Service -->
+                <div>
+                    <label class="block text-sage-800 text-sm font-medium mb-1.5">Service</label>
+                    <div class="relative">
+                        <select id="bService" class="form-input w-full px-4 py-3 rounded-xl border border-sage-200 text-sage-900 text-sm outline-none appearance-none bg-white cursor-pointer">
+                            <option value="" disabled selected class="text-sage-400">Select a service</option>
+                            <option value="Private Yoga">Private Yoga</option>
+                            <option value="Group Classes">Group Classes</option>
+                            <option value="Wellness Coaching">Wellness Coaching</option>
+                        </select>
+                        <i class="fas fa-chevron-down absolute right-4 top-1/2 -translate-y-1/2 text-sage-400 text-xs pointer-events-none"></i>
+                    </div>
+                    <p class="error-msg hidden text-red-500 text-xs mt-1.5"></p>
+                </div>
+                <!-- Date & Time row -->
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sage-800 text-sm font-medium mb-1.5">Preferred Date</label>
+                        <input type="date" id="bDate" class="form-input w-full px-4 py-3 rounded-xl border border-sage-200 text-sage-900 text-sm outline-none cursor-pointer">
+                        <p class="error-msg hidden text-red-500 text-xs mt-1.5"></p>
+                    </div>
+                    <div>
+                        <label class="block text-sage-800 text-sm font-medium mb-1.5">Preferred Time</label>
+                        <div class="relative">
+                            <select id="bTime" class="form-input w-full px-4 py-3 rounded-xl border border-sage-200 text-sage-900 text-sm outline-none appearance-none bg-white cursor-pointer">
+                                <option value="" disabled selected>Time</option>
+                                <option value="07:00">7:00 AM</option>
+                                <option value="08:00">8:00 AM</option>
+                                <option value="09:00">9:00 AM</option>
+                                <option value="10:00">10:00 AM</option>
+                                <option value="11:00">11:00 AM</option>
+                                <option value="12:00">12:00 PM</option>
+                                <option value="14:00">2:00 PM</option>
+                                <option value="15:00">3:00 PM</option>
+                                <option value="16:00">4:00 PM</option>
+                                <option value="17:00">5:00 PM</option>
+                                <option value="18:00">6:00 PM</option>
+                                <option value="19:00">7:00 PM</option>
+                            </select>
+                            <i class="fas fa-chevron-down absolute right-4 top-1/2 -translate-y-1/2 text-sage-400 text-xs pointer-events-none"></i>
+                        </div>
+                        <p class="error-msg hidden text-red-500 text-xs mt-1.5"></p>
+                    </div>
+                </div>
+                <!-- Notes -->
+                <div>
+                    <label class="block text-sage-800 text-sm font-medium mb-1.5">Notes <span class="text-sage-400 font-light">(optional)</span></label>
+                    <textarea id="bNotes" rows="3" class="form-input w-full px-4 py-3 rounded-xl border border-sage-200 text-sage-900 text-sm placeholder:text-sage-400 outline-none resize-none" placeholder="Any injuries, goals, or preferences..."></textarea>
+                </div>
+                <!-- Submit -->
+                <button type="submit" class="w-full py-4 bg-gold-500 text-sage-950 font-semibold rounded-xl text-sm tracking-wide btn-gold flex items-center justify-center gap-2">
+                    <i class="fas fa-calendar-plus text-xs"></i>
+                    Confirm Booking
+                </button>
+            </form>
         </div>
-        <p class="breath-caption">Follow the circle — this is the pace we open every session with.</p>
-      </div>
-    </div>
-  </section>
-
-  <section class="services" id="services">
-    <div class="section-head reveal">
-      <p class="eyebrow">How we work with you</p>
-      <h2>Three ways to begin</h2>
     </div>
 
-    <div class="service-grid">
-      <article class="card reveal">
-        <span class="card-icon" aria-hidden="true">
-          <svg viewBox="0 0 48 48" fill="none"><path d="M24 6c6 6 6 14 0 20-6-6-6-14 0-20Z" stroke="currentColor" stroke-width="1.6"/><path d="M24 26v16M16 42h16" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
-        </span>
-        <h3>Private Sessions</h3>
-        <p>One-to-one sessions shaped around your body, your goals, and your schedule — not a fixed routine.</p>
-      </article>
-
-      <article class="card reveal">
-        <span class="card-icon" aria-hidden="true">
-          <svg viewBox="0 0 48 48" fill="none"><circle cx="16" cy="16" r="6" stroke="currentColor" stroke-width="1.6"/><circle cx="32" cy="16" r="6" stroke="currentColor" stroke-width="1.6"/><path d="M6 40c0-7 5-11 10-11s10 4 10 11M22 40c0-7 5-11 10-11s10 4 10 11" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
-        </span>
-        <h3>Group Classes</h3>
-        <p>Shared practice in a small, quiet room — enough structure to guide, enough space to breathe.</p>
-      </article>
-
-      <article class="card reveal">
-        <span class="card-icon" aria-hidden="true">
-          <svg viewBox="0 0 48 48" fill="none"><path d="M24 8a14 14 0 0 0-8 25.5V38a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3v-4.5A14 14 0 0 0 24 8Z" stroke="currentColor" stroke-width="1.6"/><path d="M20 44h8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
-        </span>
-        <h3>Wellness Consultation</h3>
-        <p>A conversation first: we listen, assess, and map a practice that actually fits your life.</p>
-      </article>
+    <!-- ====== BOOKINGS PANEL ====== -->
+    <div id="bookingsPanel" class="fixed top-0 right-0 bottom-0 z-[55] w-full max-w-md bg-white shadow-2xl overflow-y-auto">
+        <div class="sticky top-0 bg-white/90 backdrop-blur-md border-b border-sage-100 z-10">
+            <div class="flex items-center justify-between px-6 py-5">
+                <div>
+                    <h3 class="font-display text-xl font-bold text-sage-900">My Bookings</h3>
+                    <p class="text-sage-500 text-xs font-light mt-0.5" id="bookingsCount">0 saved bookings</p>
+                </div>
+                <button id="closeBookings" class="w-10 h-10 rounded-full bg-sage-50 hover:bg-sage-100 flex items-center justify-center text-sage-500 transition" aria-label="Close bookings panel">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+        </div>
+        <div id="bookingsList" class="px-6 py-4 space-y-4">
+            <!-- Populated by JS -->
+        </div>
+        <!-- Empty state -->
+        <div id="emptyBookings" class="hidden px-6 py-20 text-center">
+            <div class="w-20 h-20 rounded-full bg-sage-50 flex items-center justify-center mx-auto mb-5">
+                <i class="fas fa-calendar-xmark text-sage-300 text-2xl"></i>
+            </div>
+            <p class="text-sage-400 text-sm font-light">No bookings yet</p>
+            <button id="emptyBookBtn" class="mt-4 px-6 py-2.5 bg-gold-500 text-sage-950 font-semibold rounded-full text-xs btn-gold">Book Your First Session</button>
+        </div>
     </div>
-  </section>
+    <div id="panelOverlay" class="fixed inset-0 z-[54] bg-sage-950/40 backdrop-blur-sm hidden" aria-hidden="true"></div>
 
-  <section class="about" id="about">
-    <div class="about-visual reveal" aria-hidden="true">
-      <div class="about-panel"></div>
-    </div>
-    <div class="about-copy reveal">
-      <p class="eyebrow">About the studio</p>
-      <h2>Yoga, taught like a conversation</h2>
-      <p>We provide modern yoga consultations that help you build flexibility, reduce stress, and move through your day with more ease. Every session starts with listening — what your body needs, where it's tight, where it's tired — before a single pose is suggested.</p>
-      <blockquote>"The practice starts before the first pose — it starts with being heard."</blockquote>
-    </div>
-  </section>
+    <!-- ====== TOAST CONTAINER ====== -->
+    <div id="toastContainer" class="fixed top-24 right-6 z-[70] flex flex-col gap-3 pointer-events-none"></div>
 
-  <section class="contact" id="contact">
-    <div class="contact-inner reveal">
-      <p class="eyebrow">Ready when you are</p>
-      <h2>Start your first session</h2>
-      <p class="contact-sub">Tell us a little about how you're feeling and what you're hoping to change — we'll take it from there.</p>
-      <a class="btn" href="mailto:hello@yogaconsultings.com">Book a consultation</a>
-      <p class="contact-detail">hello@yogaconsultings.com</p>
-    </div>
-  </section>
+    <!-- ====== HERO ====== -->
+    <section class="relative min-h-screen flex items-center justify-center overflow-hidden bg-sage-950">
+        <div class="orb orb-1" aria-hidden="true"></div>
+        <div class="orb orb-2" aria-hidden="true"></div>
+        <div class="orb orb-3" aria-hidden="true"></div>
+        <div class="breath-circle" aria-hidden="true"></div>
+        <div class="relative z-10 text-center px-6 max-w-3xl mx-auto">
+            <p class="section-label text-gold-400 text-xs font-medium uppercase mb-6 tracking-widest">Mind &middot; Body &middot; Spirit</p>
+            <h1 class="font-display text-5xl sm:text-6xl lg:text-7xl font-bold text-white leading-tight mb-6">
+                Find Balance<br><span class="font-light italic text-sage-300">in Your Life</span>
+            </h1>
+            <p class="text-white/60 text-lg sm:text-xl font-light leading-relaxed max-w-xl mx-auto mb-10">
+                Professional yoga consultations to restore your health, sharpen your mind, and elevate your lifestyle.
+            </p>
+            <a href="#" class="open-modal-btn inline-block px-10 py-4 bg-gold-500 text-sage-950 font-semibold rounded-full text-sm tracking-wide btn-gold">Start Your Journey</a>
+        </div>
+        <div class="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-3" aria-hidden="true">
+            <span class="text-white/40 text-[10px] tracking-[0.25em] uppercase">Scroll</span>
+            <div class="w-px h-12 bg-white/15 relative overflow-hidden"><div class="w-full h-1/3 bg-white/50 scroll-line"></div></div>
+        </div>
+    </section>
 
-</main>
+    <!-- ====== STATS ====== -->
+    <section class="relative bg-sage-950 border-t border-white/5">
+        <div class="max-w-7xl mx-auto px-6 lg:px-12 py-16">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-12">
+                <div class="text-center reveal"><div class="font-display text-3xl sm:text-4xl font-bold text-white mb-1"><span class="counter" data-target="500">0</span>+</div><p class="text-white/40 text-sm font-light">Clients Served</p></div>
+                <div class="text-center reveal reveal-delay-1"><div class="font-display text-3xl sm:text-4xl font-bold text-white mb-1"><span class="counter" data-target="12">0</span>+</div><p class="text-white/40 text-sm font-light">Years Experience</p></div>
+                <div class="text-center reveal reveal-delay-2"><div class="font-display text-3xl sm:text-4xl font-bold text-white mb-1"><span class="counter" data-target="3">0</span></div><p class="text-white/40 text-sm font-light">Specialized Programs</p></div>
+                <div class="text-center reveal reveal-delay-3"><div class="font-display text-3xl sm:text-4xl font-bold text-white mb-1"><span class="counter" data-target="98">0</span>%</div><p class="text-white/40 text-sm font-light">Client Satisfaction</p></div>
+            </div>
+        </div>
+    </section>
 
-<footer class="site-footer">
-  <p class="footer-logo">Yoga Consultings</p>
-  <ul class="footer-links">
-    <li><a href="#services">Services</a></li>
-    <li><a href="#about">About</a></li>
-    <li><a href="#contact">Contact</a></li>
-  </ul>
-  <p class="footer-copy">© 2026 Yoga Consultings. All rights reserved.</p>
-</footer>
+    <!-- ====== SERVICES ====== -->
+    <section id="services" class="bg-warm py-24 lg:py-32">
+        <div class="max-w-7xl mx-auto px-6 lg:px-12">
+            <div class="text-center mb-16 reveal">
+                <p class="section-label text-gold-500 text-xs font-medium uppercase mb-4 tracking-widest">What We Offer</p>
+                <div class="flex items-center justify-center gap-4">
+                    <div class="w-12 h-px bg-gold-500/30"></div>
+                    <h2 class="font-display text-4xl lg:text-5xl font-bold text-sage-900">Our Services</h2>
+                    <div class="w-12 h-px bg-gold-500/30"></div>
+                </div>
+            </div>
+            <div class="grid md:grid-cols-3 gap-8 lg:gap-10">
+                <div class="service-card bg-white rounded-2xl p-8 lg:p-10 border border-sage-100 reveal reveal-delay-1">
+                    <div class="accent-line h-1 bg-gold-500 rounded-full mb-8"></div>
+                    <div class="icon-wrap w-14 h-14 rounded-xl bg-sage-50 text-sage-600 flex items-center justify-center text-xl mb-6"><i class="fas fa-person-praying"></i></div>
+                    <h3 class="font-display text-xl font-bold text-sage-900 mb-3">Private Yoga</h3>
+                    <p class="text-sage-700/60 text-sm font-light leading-relaxed">Personalized one-on-one sessions designed around your body, goals, and lifestyle. Each practice is uniquely crafted to address your specific needs.</p>
+                </div>
+                <div class="service-card bg-white rounded-2xl p-8 lg:p-10 border border-sage-100 reveal reveal-delay-2">
+                    <div class="accent-line h-1 bg-gold-500 rounded-full mb-8"></div>
+                    <div class="icon-wrap w-14 h-14 rounded-xl bg-sage-50 text-sage-600 flex items-center justify-center text-xl mb-6"><i class="fas fa-people-group"></i></div>
+                    <h3 class="font-display text-xl font-bold text-sage-900 mb-3">Group Classes</h3>
+                    <p class="text-sage-700/60 text-sm font-light leading-relaxed">Join our peaceful group yoga classes where professional guidance meets community energy. Small class sizes ensure personalized attention.</p>
+                </div>
+                <div class="service-card bg-white rounded-2xl p-8 lg:p-10 border border-sage-100 reveal reveal-delay-3">
+                    <div class="accent-line h-1 bg-gold-500 rounded-full mb-8"></div>
+                    <div class="icon-wrap w-14 h-14 rounded-xl bg-sage-50 text-sage-600 flex items-center justify-center text-xl mb-6"><i class="fas fa-spa"></i></div>
+                    <h3 class="font-display text-xl font-bold text-sage-900 mb-3">Wellness Coaching</h3>
+                    <p class="text-sage-700/60 text-sm font-light leading-relaxed">Go beyond the mat with comprehensive wellness coaching that improves mental clarity, builds healthy habits, and nurtures overall wellbeing.</p>
+                </div>
+            </div>
+        </div>
+    </section>
 
-<script>
-  // Sticky header shrink
-  const header = document.getElementById('siteHeader');
-  window.addEventListener('scroll', () => {
-    header.classList.toggle('is-scrolled', window.scrollY > 24);
-  });
+    <!-- ====== ABOUT ====== -->
+    <section id="about" class="bg-cream py-24 lg:py-32">
+        <div class="max-w-7xl mx-auto px-6 lg:px-12">
+            <div class="grid lg:grid-cols-2 gap-16 lg:gap-20 items-center">
+                <div class="relative reveal">
+                    <div class="relative rounded-2xl overflow-hidden aspect-[4/5]">
+                        <img src="https://picsum.photos/seed/yogapeace/600/750.jpg" alt="Yoga practice in a serene studio" class="w-full h-full object-cover">
+                        <div class="absolute inset-0 bg-sage-950/20"></div>
+                    </div>
+                    <div class="absolute -bottom-6 -right-6 lg:-right-10 bg-sage-950 text-white rounded-2xl p-6 shadow-2xl">
+                        <div class="font-display text-3xl font-bold text-gold-400 mb-1">12+</div>
+                        <p class="text-white/60 text-sm font-light">Years of<br>Experience</p>
+                    </div>
+                </div>
+                <div class="reveal reveal-delay-2">
+                    <p class="section-label text-gold-500 text-xs font-medium uppercase mb-4 tracking-widest">About Us</p>
+                    <h2 class="font-display text-4xl lg:text-5xl font-bold text-sage-900 mb-6 leading-tight">Guiding You Toward<br><span class="italic font-normal text-sage-600">True Wellness</span></h2>
+                    <p class="text-sage-700/70 font-light leading-relaxed mb-6">Founded on the belief that true wellness begins with intentional movement, YogaConsult has guided over 500 individuals toward healthier, more balanced lives since 2014.</p>
+                    <p class="text-sage-700/70 font-light leading-relaxed mb-8">Our certified instructors combine ancient yoga traditions with modern biomechanics to create sessions that are as effective as they are enriching. We don't just teach poses — we help you build a sustainable practice that transforms your daily life.</p>
+                    <div class="space-y-4">
+                        <div class="flex items-center gap-4"><div class="w-8 h-8 rounded-full bg-gold-500/10 flex items-center justify-center flex-shrink-0"><i class="fas fa-check text-gold-500 text-xs"></i></div><span class="text-sage-800 text-sm font-light">Certified yoga instructors with advanced training</span></div>
+                        <div class="flex items-center gap-4"><div class="w-8 h-8 rounded-full bg-gold-500/10 flex items-center justify-center flex-shrink-0"><i class="fas fa-check text-gold-500 text-xs"></i></div><span class="text-sage-800 text-sm font-light">Personalized programs tailored to your goals</span></div>
+                        <div class="flex items-center gap-4"><div class="w-8 h-8 rounded-full bg-gold-500/10 flex items-center justify-center flex-shrink-0"><i class="fas fa-check text-gold-500 text-xs"></i></div><span class="text-sage-800 text-sm font-light">Holistic approach combining mind, body, and spirit</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 
-  // Mobile nav
-  const navToggle = document.getElementById('navToggle');
-  const navLinks = document.getElementById('navLinks');
-  navToggle.addEventListener('click', () => {
-    const open = navLinks.classList.toggle('is-open');
-    navToggle.setAttribute('aria-expanded', open);
-  });
-  navLinks.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
-    navLinks.classList.remove('is-open');
-    navToggle.setAttribute('aria-expanded', 'false');
-  }));
+    <!-- ====== TESTIMONIALS ====== -->
+    <section id="testimonials" class="bg-warm py-24 lg:py-32">
+        <div class="max-w-7xl mx-auto px-6 lg:px-12">
+            <div class="text-center mb-16 reveal">
+                <p class="section-label text-gold-500 text-xs font-medium uppercase mb-4 tracking-widest">Client Stories</p>
+                <div class="flex items-center justify-center gap-4">
+                    <div class="w-12 h-px bg-gold-500/30"></div>
+                    <h2 class="font-display text-4xl lg:text-5xl font-bold text-sage-900">What They Say</h2>
+                    <div class="w-12 h-px bg-gold-500/30"></div>
+                </div>
+            </div>
+            <div class="grid md:grid-cols-3 gap-8 lg:gap-10">
+                <div class="testimonial-card bg-white rounded-2xl p-8 lg:p-10 border border-sage-100 reveal reveal-delay-1">
+                    <div class="text-gold-500/30 text-4xl font-display mb-4"><i class="fas fa-quote-left"></i></div>
+                    <p class="text-sage-700/70 font-light leading-relaxed mb-8 text-sm">"YogaConsult transformed my relationship with my body. The private sessions were tailored perfectly to my needs, and I've never felt more aligned — physically and mentally."</p>
+                    <div class="flex items-center gap-4">
+                        <div class="w-11 h-11 rounded-full bg-sage-200 overflow-hidden"><img src="https://picsum.photos/seed/sarah88/100/100.jpg" alt="Sarah Mitchell" class="w-full h-full object-cover"></div>
+                        <div><p class="text-sage-900 font-medium text-sm">Sarah Mitchell</p><p class="text-sage-500 text-xs font-light">Private Yoga Client</p></div>
+                    </div>
+                </div>
+                <div class="testimonial-card bg-white rounded-2xl p-8 lg:p-10 border border-sage-100 reveal reveal-delay-2">
+                    <div class="text-gold-500/30 text-4xl font-display mb-4"><i class="fas fa-quote-left"></i></div>
+                    <p class="text-sage-700/70 font-light leading-relaxed mb-8 text-sm">"The group classes have become the highlight of my week. The energy, the guidance, the sense of community — everything is exceptional. I've made real progress."</p>
+                    <div class="flex items-center gap-4">
+                        <div class="w-11 h-11 rounded-full bg-sage-200 overflow-hidden"><img src="https://picsum.photos/seed/david42/100/100.jpg" alt="David Chen" class="w-full h-full object-cover"></div>
+                        <div><p class="text-sage-900 font-medium text-sm">David Chen</p><p class="text-sage-500 text-xs font-light">Group Class Member</p></div>
+                    </div>
+                </div>
+                <div class="testimonial-card bg-white rounded-2xl p-8 lg:p-10 border border-sage-100 reveal reveal-delay-3">
+                    <div class="text-gold-500/30 text-4xl font-display mb-4"><i class="fas fa-quote-left"></i></div>
+                    <p class="text-sage-700/70 font-light leading-relaxed mb-8 text-sm">"Wellness coaching here goes far beyond yoga. They helped me build sustainable habits that improved every aspect of my life — from sleep to productivity to relationships."</p>
+                    <div class="flex items-center gap-4">
+                        <div class="w-11 h-11 rounded-full bg-sage-200 overflow-hidden"><img src="https://picsum.photos/seed/amara77/100/100.jpg" alt="Amara Osei" class="w-full h-full object-cover"></div>
+                        <div><p class="text-sage-900 font-medium text-sm">Amara Osei</p><p class="text-sage-500 text-xs font-light">Wellness Coaching Client</p></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 
-  // Scroll reveal
-  const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  if (!prefersReduced) {
-    const io = new IntersectionObserver((entries) => {
-      entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('is-visible'); });
-    }, { threshold: 0.15 });
-    document.querySelectorAll('.reveal').forEach(el => io.observe(el));
-  } else {
-    document.querySelectorAll('.reveal').forEach(el => el.classList.add('is-visible'));
-  }
+    <!-- ====== CTA / CONTACT ====== -->
+    <section id="contact" class="relative bg-sage-950 py-24 lg:py-32 overflow-hidden">
+        <div class="absolute top-0 right-0 w-96 h-96 bg-sage-800/20 rounded-full blur-[120px]" aria-hidden="true"></div>
+        <div class="absolute bottom-0 left-0 w-72 h-72 bg-gold-500/5 rounded-full blur-[100px]" aria-hidden="true"></div>
+        <div class="relative z-10 max-w-3xl mx-auto px-6 text-center reveal">
+            <p class="section-label text-gold-400 text-xs font-medium uppercase mb-6 tracking-widest">Begin Today</p>
+            <h2 class="font-display text-4xl sm:text-5xl lg:text-6xl font-bold text-white leading-tight mb-6">Start Your<br><span class="italic font-normal text-sage-300">Yoga Journey</span></h2>
+            <p class="text-white/50 font-light leading-relaxed max-w-lg mx-auto mb-10">Take the first step toward a healthier, more balanced life. Contact us today to schedule your complimentary consultation.</p>
+            <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+                <a href="#" class="open-modal-btn px-10 py-4 bg-gold-500 text-sage-950 font-semibold rounded-full text-sm tracking-wide btn-gold inline-flex items-center gap-2"><i class="fas fa-calendar-plus text-xs"></i> Book Consultation</a>
+                <a href="#services" class="px-10 py-4 border border-white/20 text-white font-medium rounded-full text-sm tracking-wide btn-outline">Explore Services</a>
+            </div>
+        </div>
+    </section>
 
-  // Breath pacer: Inhale 4 / Hold 4 / Exhale 4 / Hold 4 (box breathing)
-  if (!prefersReduced) {
-    const word = document.getElementById('breathWord');
-    const count = document.getElementById('breathCount');
-    const widget = document.getElementById('breathWidget');
-    const phases = [
-      { label: 'Inhale', seconds: 4, cls: 'phase-in' },
-      { label: 'Hold', seconds: 4, cls: 'phase-hold' },
-      { label: 'Exhale', seconds: 4, cls: 'phase-out' },
-      { label: 'Hold', seconds: 4, cls: 'phase-hold' }
-    ];
-    let phaseIndex = 0, tick = 0;
-    function step() {
-      const phase = phases[phaseIndex];
-      if (tick === 0) {
-        widget.classList.remove('phase-in', 'phase-hold', 'phase-out');
-        widget.classList.add(phase.cls);
-        word.textContent = phase.label;
-      }
-      count.textContent = phase.seconds - tick;
-      tick++;
-      if (tick >= phase.seconds) { tick = 0; phaseIndex = (phaseIndex + 1) % phases.length; }
-      setTimeout(step, 1000);
-    }
-    step();
-  } else {
-    document.getElementById('breathWord').textContent = 'Breathe';
-    document.getElementById('breathCount').textContent = '';
-  }
-</script>
+    <!-- ====== FOOTER ====== -->
+    <footer class="bg-sage-950 border-t border-white/5">
+        <div class="max-w-7xl mx-auto px-6 lg:px-12 py-16">
+            <div class="grid md:grid-cols-4 gap-12 mb-16">
+                <div class="md:col-span-2">
+                    <a href="#" class="font-display text-2xl font-bold text-white">YogaConsult</a>
+                    <p class="text-white/40 font-light text-sm leading-relaxed mt-4 max-w-sm">Helping people achieve balance in mind, body, and life through professional yoga consultation and mindful living practices.</p>
+                    <div class="flex gap-4 mt-6">
+                        <a href="#" class="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center text-white/40 hover:text-gold-400 hover:border-gold-400/30 transition" aria-label="Instagram"><i class="fab fa-instagram text-sm"></i></a>
+                        <a href="#" class="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center text-white/40 hover:text-gold-400 hover:border-gold-400/30 transition" aria-label="Facebook"><i class="fab fa-facebook-f text-sm"></i></a>
+                        <a href="#" class="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center text-white/40 hover:text-gold-400 hover:border-gold-400/30 transition" aria-label="YouTube"><i class="fab fa-youtube text-sm"></i></a>
+                    </div>
+                </div>
+                <div>
+                    <h4 class="text-white font-medium text-sm mb-6">Quick Links</h4>
+                    <ul class="space-y-3">
+                        <li><a href="#" class="text-white/40 text-sm font-light hover:text-gold-400 transition">Home</a></li>
+                        <li><a href="#services" class="text-white/40 text-sm font-light hover:text-gold-400 transition">Services</a></li>
+                        <li><a href="#about" class="text-white/40 text-sm font-light hover:text-gold-400 transition">About Us</a></li>
+                        <li><a href="#testimonials" class="text-white/40 text-sm font-light hover:text-gold-400 transition">Testimonials</a></li>
+                        <li><a href="#contact" class="text-white/40 text-sm font-light hover:text-gold-400 transition">Contact</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-white font-medium text-sm mb-6">Services</h4>
+                    <ul class="space-y-3">
+                        <li><a href="#services" class="text-white/40 text-sm font-light hover:text-gold-400 transition">Private Yoga</a></li>
+                        <li><a href="#services" class="text-white/40 text-sm font-light hover:text-gold-400 transition">Group Classes</a></li>
+                        <li><a href="#services" class="text-white/40 text-sm font-light hover:text-gold-400 transition">Wellness Coaching</a></li>
+                        <li><a href="#" class="open-modal-btn text-white/40 text-sm font-light hover:text-gold-400 transition">Book a Session</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="border-t border-white/5 pt-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+                <p class="text-white/30 text-xs font-light">&copy; 2026 YogaConsult. All Rights Reserved.</p>
+                <p class="text-white/20 text-xs font-light">Designed with intention and care</p>
+            </div>
+        </div>
+    </footer>
 
+    <!-- ====== JAVASCRIPT ====== -->
+    <script>
+        /* ───── localStorage helpers ───── */
+        const STORAGE_KEY = 'yogaconsult_bookings';
+
+        function getBookings() {
+            try {
+                return JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+            } catch { return []; }
+        }
+
+        function saveBookings(bookings) {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(bookings));
+        }
+
+        function addBooking(data) {
+            const bookings = getBookings();
+            data.id = Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
+            data.createdAt = new Date().toISOString();
+            bookings.unshift(data);
+            saveBookings(bookings);
+            return data;
+        }
+
+        function removeBooking(id) {
+            const bookings = getBookings().filter(b => b.id !== id);
+            saveBookings(bookings);
+        }
+
+        /* ───── Toast notifications ───── */
+        function showToast(message, type) {
+            const container = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+            const iconMap = { success: 'fa-circle-check', error: 'fa-circle-exclamation', info: 'fa-circle-info' };
+            const colorMap = { success: 'border-sage-600 bg-sage-600/10', error: 'border-red-500 bg-red-500/10', info: 'border-gold-500 bg-gold-500/10' };
+            const iconColorMap = { success: 'text-sage-600', error: 'text-red-500', info: 'text-gold-500' };
+
+            toast.className = `toast pointer-events-auto flex items-center gap-3 px-5 py-3.5 rounded-xl border ${colorMap[type]} backdrop-blur-lg shadow-lg min-w-[280px]`;
+            toast.innerHTML = `<i class="fas ${iconMap[type]} ${iconColorMap[type]}"></i><span class="text-sage-900 text-sm font-medium">${message}</span>`;
+            container.appendChild(toast);
+
+            setTimeout(() => {
+                toast.classList.add('removing');
+                toast.addEventListener('animationend', () => toast.remove());
+            }, 3500);
+        }
+
+        /* ───── Navbar scroll effect ───── */
+        const navbar = document.getElementById('navbar');
+        window.addEventListener('scroll', () => {
+            navbar.classList.toggle('scrolled', window.scrollY > 80);
+        });
+
+        /* ───── Mobile menu ───── */
+        const menuBtn = document.getElementById('menuBtn');
+        const closeMenuBtn = document.getElementById('closeMenu');
+        const mobileMenu = document.getElementById('mobileMenu');
+        const mobileLinks = mobileMenu.querySelectorAll('a');
+
+        menuBtn.addEventListener('click', () => { mobileMenu.classList.add('open'); document.body.style.overflow = 'hidden'; });
+        function closeMenu() { mobileMenu.classList.remove('open'); document.body.style.overflow = ''; }
+        closeMenuBtn.addEventListener('click', closeMenu);
+        mobileLinks.forEach(link => link.addEventListener('click', closeMenu));
+
+        /* ───── Booking modal ───── */
+        const bookingModal = document.getElementById('bookingModal');
+        const modalOverlay = document.getElementById('modalOverlay');
+        const closeModalBtn = document.getElementById('closeModal');
+        const bookingForm = document.getElementById('bookingForm');
+
+        function openModal() {
+            bookingModal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+            /* Set minimum date to today */
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('bDate').setAttribute('min', today);
+        }
+
+        function closeModal() {
+            bookingModal.classList.remove('active');
+            document.body.style.overflow = '';
+            clearErrors();
+            bookingForm.reset();
+        }
+
+        /* All elements that should open the modal */
+        document.querySelectorAll('.open-modal-btn, #navBookBtn, #mobileBookBtn, #emptyBookBtn').forEach(el => {
+            el.addEventListener('click', (e) => { e.preventDefault(); openModal(); });
+        });
+
+        closeModalBtn.addEventListener('click', closeModal);
+        modalOverlay.addEventListener('click', closeModal);
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                if (bookingModal.classList.contains('active')) closeModal();
+                if (bookingsPanel.classList.contains('open')) closeBookingsPanel();
+            }
+        });
+
+        /* ───── Form validation ───── */
+        function showError(inputId, message) {
+            const input = document.getElementById(inputId);
+            const errorEl = input.parentElement.querySelector('.error-msg');
+            input.classList.add('error');
+            errorEl.textContent = message;
+            errorEl.classList.remove('hidden');
+        }
+
+        function clearError(inputId) {
+            const input = document.getElementById(inputId);
+            const errorEl = input.parentElement.querySelector('.error-msg');
+            if (errorEl) {
+                input.classList.remove('error');
+                errorEl.classList.add('hidden');
+                errorEl.textContent = '';
+            }
+        }
+
+        function clearErrors() {
+            ['bName','bEmail','bPhone','bService','bDate','bTime'].forEach(clearError);
+        }
+
+        /* Live clear errors on input */
+        ['bName','bEmail','bPhone','bService','bDate','bTime'].forEach(id => {
+            const el = document.getElementById(id);
+            el.addEventListener('input', () => clearError(id));
+            el.addEventListener('change', () => clearError(id));
+        });
+
+        function validateForm() {
+            let valid = true;
+            clearErrors();
+
+            const name = document.getElementById('bName').value.trim();
+            const email = document.getElementById('bEmail').value.trim();
+            const phone = document.getElementById('bPhone').value.trim();
+            const service = document.getElementById('bService').value;
+            const date = document.getElementById('bDate').value;
+            const time = document.getElementById('bTime').value;
+
+            if (!name || name.length < 2) { showError('bName', 'Please enter your full name'); valid = false; }
+            if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { showError('bEmail', 'Please enter a valid email address'); valid = false; }
+            if (!phone || phone.length < 7) { showError('bPhone', 'Please enter a valid phone number'); valid = false; }
+            if (!service) { showError('bService', 'Please select a service'); valid = false; }
+            if (!date) { showError('bDate', 'Please select a date'); valid = false; }
+            else {
+                const selectedDate = new Date(date + 'T00:00:00');
+                const today = new Date(); today.setHours(0,0,0,0);
+                if (selectedDate < today) { showError('bDate', 'Date cannot be in the past'); valid = false; }
+            }
+            if (!time) { showError('bTime', 'Please select a time'); valid = false; }
+
+            return valid;
+        }
+
+        /* ───── Form submit ───── */
+        bookingForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            if (!validateForm()) {
+                showToast('Please fix the errors above', 'error');
+                return;
+            }
+
+            const booking = {
+                name: document.getElementById('bName').value.trim(),
+                email: document.getElementById('bEmail').value.trim(),
+                phone: document.getElementById('bPhone').value.trim(),
+                service: document.getElementById('bService').value,
+                date: document.getElementById('bDate').value,
+                time: document.getElementById('bTime').value,
+                notes: document.getElementById('bNotes').value.trim(),
+            };
+
+            addBooking(booking);
+            closeModal();
+            updateBadge();
+            renderBookings();
+            showToast('Booking confirmed successfully!', 'success');
+        });
+
+        /* ───── Bookings panel ───── */
+        const bookingsPanel = document.getElementById('bookingsPanel');
+        const panelOverlay = document.getElementById('panelOverlay');
+        const openBookingsBtn = document.getElementById('openBookings');
+        const closeBookingsBtn = document.getElementById('closeBookings');
+
+        function openBookingsPanel() {
+            renderBookings();
+            bookingsPanel.classList.add('open');
+            panelOverlay.classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeBookingsPanel() {
+            bookingsPanel.classList.remove('open');
+            panelOverlay.classList.add('hidden');
+            document.body.style.overflow = '';
+        }
+
+        openBookingsBtn.addEventListener('click', openBookingsPanel);
+        closeBookingsBtn.addEventListener('click', closeBookingsPanel);
+        panelOverlay.addEventListener('click', closeBookingsPanel);
+
+        /* ───── Render bookings list ───── */
+        function formatTime(t) {
+            if (!t) return '';
+            const [h, m] = t.split(':').map(Number);
+            const ampm = h >= 12 ? 'PM' : 'AM';
+            const hour = h > 12 ? h - 12 : (h === 0 ? 12 : h);
+            return `${hour}:${m.toString().padStart(2, '0')} ${ampm}`;
+        }
+
+        function formatDate(d) {
+            if (!d) return '';
+            const date = new Date(d + 'T00:00:00');
+            return date.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' });
+        }
+
+        function getServiceIcon(service) {
+            const map = { 'Private Yoga': 'fa-person-praying', 'Group Classes': 'fa-people-group', 'Wellness Coaching': 'fa-spa' };
+            return map[service] || 'fa-om';
+        }
+
+        function getServiceColor(service) {
+            const map = { 'Private Yoga': 'bg-sage-100 text-sage-600', 'Group Classes': 'bg-gold-500/10 text-gold-600', 'Wellness Coaching': 'bg-emerald-50 text-emerald-600' };
+            return map[service] || 'bg-sage-100 text-sage-600';
+        }
+
+        function renderBookings() {
+            const list = document.getElementById('bookingsList');
+            const empty = document.getElementById('emptyBookings');
+            const countEl = document.getElementById('bookingsCount');
+            const bookings = getBookings();
+
+            countEl.textContent = `${bookings.length} saved booking${bookings.length !== 1 ? 's' : ''}`;
+
+            if (bookings.length === 0) {
+                list.innerHTML = '';
+                empty.classList.remove('hidden');
+                return;
+            }
+
+            empty.classList.add('hidden');
+            list.innerHTML = bookings.map(b => `
+                <div class="booking-card bg-warm rounded-xl p-5 border border-sage-100 relative" data-id="${b.id}">
+                    <div class="flex items-start justify-between gap-3 mb-3">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-lg ${getServiceColor(b.service)} flex items-center justify-center text-sm flex-shrink-0">
+                                <i class="fas ${getServiceIcon(b.service)}"></i>
+                            </div>
+                            <div>
+                                <p class="text-sage-900 font-medium text-sm">${b.service}</p>
+                                <p class="text-sage-400 text-xs font-light">${b.name}</p>
+                            </div>
+                        </div>
+                        <button onclick="deleteBooking('${b.id}')" class="w-8 h-8 rounded-lg hover:bg-red-50 flex items-center justify-center text-sage-300 hover:text-red-400 transition flex-shrink-0" aria-label="Delete booking">
+                            <i class="fas fa-trash-can text-xs"></i>
+                        </button>
+                    </div>
+                    <div class="flex flex-wrap gap-x-5 gap-y-2 text-xs text-sage-500 font-light">
+                        <span class="flex items-center gap-1.5"><i class="far fa-calendar text-[10px]"></i>${formatDate(b.date)}</span>
+                        <span class="flex items-center gap-1.5"><i class="far fa-clock text-[10px]"></i>${formatTime(b.time)}</span>
+                        <span class="flex items-center gap-1.5"><i class="far fa-envelope text-[10px]"></i>${b.email}</span>
+                    </div>
+                    ${b.notes ? `<p class="mt-3 text-sage-600/60 text-xs font-light italic border-t border-sage-100 pt-3">"${b.notes}"</p>` : ''}
+                </div>
+            `).join('');
+        }
+
+        function deleteBooking(id) {
+            const card = document.querySelector(`.booking-card[data-id="${id}"]`);
+            if (card) {
+                card.classList.add('removing');
+                card.addEventListener('transitionend', () => {
+                    removeBooking(id);
+                    updateBadge();
+                    renderBookings();
+                    showToast('Booking removed', 'info');
+                }, { once: true });
+            } else {
+                removeBooking(id);
+                updateBadge();
+                renderBookings();
+                showToast('Booking removed', 'info');
+            }
+        }
+
+        /* ───── Badge update ───── */
+        function updateBadge() {
+            const badge = document.getElementById('bookingBadge');
+            const count = getBookings().length;
+            if (count > 0) {
+                badge.textContent = count > 9 ? '9+' : count;
+                badge.classList.remove('hidden');
+                badge.classList.add('flex');
+            } else {
+                badge.classList.add('hidden');
+                badge.classList.remove('flex');
+            }
+        }
+
+        /* ───── Scroll reveal ───── */
+        const revealElements = document.querySelectorAll('.reveal');
+        const revealObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    revealObserver.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
+        revealElements.forEach(el => revealObserver.observe(el));
+
+        /* ───── Counter animation ───── */
+        const counters = document.querySelectorAll('.counter');
+        let countersAnimated = false;
+        const counterObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting && !countersAnimated) {
+                    countersAnimated = true;
+                    counters.forEach(counter => {
+                        const target = parseInt(counter.dataset.target);
+                        const duration = 2000;
+                        const startTime = performance.now();
+                        function update(now) {
+                            const elapsed = now - startTime;
+                            const progress = Math.min(elapsed / duration, 1);
+                            const eased = 1 - Math.pow(1 - progress, 3);
+                            counter.textContent = Math.floor(eased * target);
+                            if (progress < 1) requestAnimationFrame(update);
+                            else counter.textContent = target;
+                        }
+                        requestAnimationFrame(update);
+                    });
+                }
+            });
+        }, { threshold: 0.5 });
+        counters.forEach(c => counterObserver.observe(c));
+
+        /* ───── Init ───── */
+        updateBadge();
+    </script>
 </body>
 </html>
