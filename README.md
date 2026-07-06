@@ -1,25 +1,25 @@
 # Yoga Consultings
 
-A modern and responsive landing page for a yoga consultation business, designed to promote wellness services, attract new clients, and encourage consultation bookings.
+A modern, distinctive landing page for a yoga consultation business. The design is built around the idea at the center of the practice itself — breath — with a live breathing-pace animation as the page's signature element, framed by a warm stone-and-moss palette and editorial serif type.
 
 ## Features
 
-- 🧘 Modern landing page design
-- 📱 Fully responsive layout
-- 🌿 Hero section with call-to-action
-- 💼 Service cards for yoga offerings
-- ℹ️ About section
-- 📞 Contact section with booking button
-- 🎨 Clean UI using the Poppins font
+- 🫁 **Signature breath widget** — a hero-level animation that visually paces box breathing (inhale 4s / hold 4s / exhale 4s / hold 4s), synced to a live label and countdown
+- 🎨 Custom design system — warm stone background, deep moss and muted mauve accents, no stock template palette
+- ✍️ Editorial type pairing — Fraunces (display serif) + Manrope (body) + IBM Plex Mono (labels/eyebrows)
+- 📱 Fully responsive, down to small mobile screens, with a working mobile nav menu
+- 🌀 Scroll-reveal animation, respecting `prefers-reduced-motion`
+- 🧘 Service cards, about section, and contact section built around real service copy
+- ♿ Visible keyboard focus and accessible landmarks
 
 ## Sections
 
 | Section | Description |
 |---------|-------------|
-| Home | Hero section introducing Yoga Consultings |
-| Services | Private Yoga, Group Classes, and Wellness Consultation |
-| About | Information about the company and its mission |
-| Contact | Call-to-action to book a consultation |
+| Hero | Split layout — headline and CTA on one side, live breathing-pace animation on the other |
+| Services | Private Sessions, Group Classes, and Wellness Consultation |
+| About | Studio mission, told as a conversation, with a pull quote |
+| Contact | Call-to-action to book a first consultation |
 
 ## Getting Started
 
@@ -53,9 +53,9 @@ npx serve .
 ## Technologies Used
 
 - HTML5
-- CSS3
-- Google Fonts (Poppins)
-- Responsive Flexbox Layout
+- CSS3 (custom properties / design tokens, CSS Grid, hairline-grid card layout)
+- Vanilla JavaScript (breath-pacer animation, scroll-reveal via IntersectionObserver, sticky header, mobile nav)
+- Google Fonts — Fraunces, Manrope, IBM Plex Mono
 
 ## Services
 
@@ -66,11 +66,12 @@ npx serve .
 
 ## Design Highlights
 
-- Responsive navigation bar
-- Full-screen hero banner
-- Modern service cards
-- Minimalist wellness-inspired color palette
-- Clean typography with Google Fonts
+- **Signature element:** an animated breathing-pace circle in the hero, tying the page's one moment of visual boldness directly to the subject of the business
+- Restrained, hairline-grid service cards instead of heavy drop-shadow cards
+- Stone/moss/mauve palette chosen to avoid generic "wellness template" cream-and-terracotta defaults
+- Editorial serif + grotesque sans type pairing for a distinctive, non-templated voice
+- Sticky header that compresses on scroll
+- Accessible mobile navigation
 
 ## Future Improvements
 
@@ -79,8 +80,7 @@ npx serve .
 - Testimonials section
 - Pricing plans
 - Dark mode
-- Smooth scrolling navigation
-- Mobile navigation menu
+- Instructor profiles
 
 ## License
 
@@ -88,4 +88,4 @@ This project is intended for educational and portfolio purposes.
 
 ---
 
-**Yoga Consultings** — Helping people achieve balance in mind, body, and life through professional yoga consultation.
+**Yoga Consultings** — Helping people achieve balance in mind, body, and life, one breath at a time.
